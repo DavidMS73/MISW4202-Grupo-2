@@ -1,11 +1,16 @@
-from flask import request
+import csv
+import os
+import random
+import time
+from datetime import date
+
 import requests
-from modelos import db, Compra, CompraSchema, Producto, ProductoSchema
+from flask import request
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
-from datetime import date
-import time
-import os
+
+from logica import votar_recomendacion_compras, obtener_recomendaciones_real
+from modelos import db, Compra, CompraSchema, Producto, ProductoSchema
 
 compra_schema = CompraSchema()
 producto_schema = ProductoSchema()
@@ -49,23 +54,39 @@ class VistaRecomendacionCompras(Resource):
         if content_venta.status_code == 404:
             return content_venta.json(), 404
 
-        else:
-            bodega_info = content_bodega.json()
-            venta_info = content_venta.json()
+        bodega_info = content_bodega.json()
+        venta_info = content_venta.json()
 
-            "Test purpose"
-            time.sleep(2)
+        "Test purpose"
+        time.sleep(2)
 
-            return [
-                {
-                    "nombre": "Producto 1",
-                    "bodega": bodega_info,
-                    "venta": venta_info,
-                    "descripcion": "Descripción del producto 1",
-                    "condiciones_almacenamiento": "Condiciones de almacenamiento del producto 1",
-                    "valor_unidad": 1000,
-                },
-            ]
+        eventos = ["evento_grande", "evento_mediano", "evento_pequeno"]
+        eventos_elegidos = eventos[:random.randint(1, 3)]
+
+        resultados = votar_recomendacion_compras(bodega_info, venta_info, eventos_elegidos)
+        resultado_esperado = obtener_recomendaciones_real(bodega_info, venta_info, eventos_elegidos)
+        first_return_time = min([result.return_time for result in resultados[1]])
+        finish_time = time.perf_counter()
+        voting_time = finish_time - first_return_time
+
+        file_path = "voting_results.csv"
+        file_exists = os.path.exists(file_path)
+
+        with open(file_path, "a", newline="") as file:
+            writer = csv.writer(file)
+
+            if not file_exists:
+                writer.writerow(["resultado_1", "resultado_2", "resultado_3", "resultado_final", "resultado_correcto",
+                                 "tiempo_votacion"])
+
+            writer.writerow([resultados[1][0].result,
+                             resultados[1][1].result,
+                             resultados[1][2].result,
+                             resultados[0],
+                             resultado_esperado,
+                             voting_time])
+
+        return resultados[0], 200
 
 
 class VistaProductos(Resource):
@@ -88,7 +109,7 @@ class VistaComprasProductos(Resource):
 
     def post(self, id_producto, id_compra):
         producto = Producto.query.get_or_404(id_producto)
-        compra = compra.query.get_or_404(id_compra)
+        compra = Compra.query.get_or_404(id_compra)
         producto.compras.append(compra)
 
         try:

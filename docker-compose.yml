@@ -5,12 +5,16 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "9001:5000"
+    volumes:
+      - ./microservicio_bodegas:/app
   ventas:
     build:
       context: ./microservicio_ventas
       dockerfile: ./Dockerfile
     ports:
       - "9002:5000"
+    volumes:
+      - ./microservicio_ventas:/app
   compras:
     build:
       context: ./microservicio_compras
@@ -20,6 +24,9 @@ services:
     depends_on:
       - bodegas
       - ventas
+    volumes:
+      - ./microservicio_compras:/app
+
   nginx:
     image: nginx:alpine
     volumes:
@@ -30,4 +37,3 @@ services:
       - compras
       - bodegas
       - ventas
-  
