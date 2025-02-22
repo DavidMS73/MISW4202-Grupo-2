@@ -20,4 +20,14 @@ services:
     depends_on:
       - bodegas
       - ventas
+  nginx:
+    image: nginx:alpine
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    ports:
+      - 8080:80
+    depends_on:
+      - compras
+      - bodegas
+      - ventas
   
