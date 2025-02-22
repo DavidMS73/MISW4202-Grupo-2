@@ -1,0 +1,13 @@
+click
+Flask
+Flask-SQLAlchemy
+greenlet
+itsdangerous
+Jinja2
+MarkupSafe
+marshmallow
+marshmallow-sqlalchemy
+SQLAlchemy
+Werkzeug
+flask_restful
+requests

@@ -1,4 +1,4 @@
-from microservicio_1 import create_app
+from microservicio_bodegas import create_app
 from flask_restful import Resource, Api
 from flask import Flask, request
 import requests

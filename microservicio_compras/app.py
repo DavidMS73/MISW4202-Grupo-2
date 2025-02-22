@@ -1,4 +1,4 @@
-from microservicio_2 import create_app
+from microservicio_compras import create_app
 from flask_restful import Api
 from .modelos import db
 from .vistas import VistaCompras, VistaRecomendacionCompras, VistaProductos
