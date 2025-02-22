@@ -1,14 +1,26 @@
 from flask import request
 import requests
-from ..modelos import db, Compra, CompraSchema, Producto, ProductoSchema
+from modelos import db, Compra, CompraSchema, Producto, ProductoSchema
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 from datetime import date
 import time
+import os
 
 compra_schema = CompraSchema()
 producto_schema = ProductoSchema()
 
+env_bodegas_host = os.environ.get('BODEGAS_HOST')
+env_ventas_host = os.environ.get('VENTAS_HOST')
+bodegas_host = env_bodegas_host if env_bodegas_host else 'http://127.0.0.1:9001'
+ventas_host = env_ventas_host if env_ventas_host else 'http://127.0.0.1:9002'
+
+class VistaEnv(Resource):
+    def get(self):
+        return {
+            "bodegas_host": bodegas_host,
+            "ventas_host": ventas_host,
+        }
 
 class VistaCompras(Resource):
 
@@ -28,8 +40,8 @@ class VistaRecomendacionCompras(Resource):
 
     def get(self):
         "Simula una recomendación de compras"
-        content_bodega = requests.get("http://127.0.0.1:5001/bodega")
-        content_venta = requests.get("http://127.0.0.1:5002/venta")
+        content_bodega = requests.get(f"{bodegas_host}/bodega")
+        content_venta = requests.get(f"{ventas_host}/venta")
 
         if content_bodega.status_code == 404:
             return content_bodega.json(), 404

@@ -11,3 +11,4 @@ SQLAlchemy
 Werkzeug
 flask_restful
 requests
+gunicorn

@@ -1,0 +1,23 @@
+services:
+  bodegas:
+    build:
+      context: ./microservicio_bodegas
+      dockerfile: ./Dockerfile
+    ports:
+      - "9001:5000"
+  ventas:
+    build:
+      context: ./microservicio_ventas
+      dockerfile: ./Dockerfile
+    ports:
+      - "9002:5000"
+  compras:
+    build:
+      context: ./microservicio_compras
+      dockerfile: ./Dockerfile
+    ports:
+      - "9000:5000"
+    depends_on:
+      - bodegas
+      - ventas
+  
