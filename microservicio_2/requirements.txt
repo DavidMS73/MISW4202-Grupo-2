@@ -1,0 +1,15 @@
+aniso8601
+click
+Flask
+Flask-RESTful
+Flask-SQLAlchemy
+greenlet
+itsdangerous
+Jinja2
+MarkupSafe
+marshmallow
+marshmallow-sqlalchemy
+pytz
+six
+SQLAlchemy
+Werkzeug
