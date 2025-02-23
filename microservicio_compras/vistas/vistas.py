@@ -3,6 +3,7 @@ import os
 import random
 import time
 from datetime import date
+from random import randint
 
 import requests
 from flask import request
@@ -86,7 +87,7 @@ class VistaRecomendacionCompras(Resource):
                              resultado_esperado,
                              voting_time])
 
-        return resultados[0], 200
+        return {"cantidad": resultados[0], "producto": "Producto {}".format(randint(0, 100))}, 200
 
 
 class VistaProductos(Resource):
