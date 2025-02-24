@@ -1,0 +1,213 @@
+{
+	"info": {
+		"_postman_id": "5c05553e-fb1a-4f62-93d6-bf1347b2ecd8",
+		"name": "Arquitectura",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "38886553"
+	},
+	"item": [
+		{
+			"name": "Crear compra",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"estado\": \"Iniciada\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "localhost:5000/compra",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"compra"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Recomendacion compra",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{token}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/compra/recomendacion",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"compra",
+						"recomendacion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Compras",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenPersona}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5000/compra",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"compra"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Bodega",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenPersona}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5001/bodega",
+					"host": [
+						"localhost"
+					],
+					"port": "5001",
+					"path": [
+						"bodega"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Venta",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenPersona}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:5002/venta",
+					"host": [
+						"localhost"
+					],
+					"port": "5002",
+					"path": [
+						"venta"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Compras recomendación proxy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenPersona}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "localhost:8080/compras/compra/recomendacion",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"compras",
+						"compra",
+						"recomendacion"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Compras recomendación proxy remoto",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{tokenPersona}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "3.143.3.118:8080/compras/compra/recomendacion",
+					"host": [
+						"3",
+						"143",
+						"3",
+						"118"
+					],
+					"port": "8080",
+					"path": [
+						"compras",
+						"compra",
+						"recomendacion"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
