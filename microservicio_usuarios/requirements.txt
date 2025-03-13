@@ -1,6 +1,8 @@
 click
 Flask
 Flask-SQLAlchemy
+Flask-JWT==0.2.0
+Flask-JWT-Extended==4.2.3
 greenlet
 itsdangerous
 Jinja2
@@ -16,3 +18,4 @@ psycopg2
 marshmallow
 marshmallow-sqlalchemy
 marshmallow_enum
+PyJWT==2.1.0

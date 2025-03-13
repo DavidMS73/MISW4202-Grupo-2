@@ -4,7 +4,7 @@ from modelos import db
 from vistas import VistaCompras, VistaRecomendacionCompras, VistaProductos, VistaEnv
 
 app = Flask(__name__)  
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///ccpms2.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgresql://postgres:arquitectura@arquitecturas-agiles-software.ceebxtes3heo.us-east-1.rds.amazonaws.com:5432/compras'
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app_context = app.app_context()
 app_context.push()

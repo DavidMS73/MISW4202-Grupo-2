@@ -12,3 +12,7 @@ Werkzeug
 flask_restful
 requests
 gunicorn
+psycopg2
+marshmallow
+marshmallow-sqlalchemy
+marshmallow_enum
