@@ -1,7 +1,6 @@
 from flask_restful import Resource, Api
 from flask import Flask, request
-import requests
-import json
+
 from modelos import db, Usuario, UsuarioSchema, RolesEnum
 from utils import allowed_roles
 
@@ -40,6 +39,19 @@ class VistaUsuarios(Resource):
         db.session.add(nuevo_usuario)
         db.session.commit()
         return usuario_schema.dump(nuevo_usuario)
+    
+
+class VistaValidarUsuario(Resource):
+    def post(self):
+        req_json = request.json
+        usuario = Usuario.query.filter(
+            Usuario.usuario == req_json['usuario'],
+            Usuario.contrasena == req_json['contrasena']
+        ).first()
+        if usuario == None:
+            return 'Usuario o contraseña incorrectos', 401
+        return usuario_schema.dump(usuario)
 
 
 api.add_resource(VistaUsuarios, "/usuario")
+api.add_resource(VistaValidarUsuario, "/usuario/validar")

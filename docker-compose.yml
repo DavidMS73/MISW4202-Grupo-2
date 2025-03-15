@@ -26,14 +26,30 @@ services:
       - ventas
     volumes:
       - ./microservicio_compras:/app
-
-  nginx:
-    image: nginx:alpine
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  usuarios:
+    build:
+      context: ./microservicio_usuarios
+      dockerfile: ./Dockerfile
     ports:
-      - 8080:80
-    depends_on:
-      - compras
-      - bodegas
-      - ventas
+      - "9003:5000"
+    volumes:
+      - ./microservicio_usuarios:/app
+  autorizador:
+    build:
+      context: ./microservicio_autorizador
+      dockerfile: ./Dockerfile
+    ports:
+      - "9004:5000"
+    volumes:
+      - ./microservicio_autorizador:/app
+
+  # nginx:
+  #   image: nginx:alpine
+  #   volumes:
+  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  #   ports:
+  #     - 8080:80
+  #   depends_on:
+  #     - compras
+  #     - bodegas
+  #     - ventas
