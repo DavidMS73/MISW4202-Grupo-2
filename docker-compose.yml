@@ -52,3 +52,5 @@ services:
       - bodegas
       - ventas
       - compras
+      - usuarios
+      - autorizador
