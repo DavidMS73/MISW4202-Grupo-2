@@ -31,11 +31,11 @@ class VistaAutorizador(Resource):
             headers = {'Content-Type': 'application/json'}
             response = req.post(
                 self.usuarios_url,
+                headers=headers,
                 data=json_encoder.encode({
                     'usuario': args['usuario'],
                     'contrasena': args['contrasena']
                 }),
-                headers=headers,
             )
             if response.status_code == 401:
                 return {'error': 'Usuario o contraseña incorrectos'}, 401
