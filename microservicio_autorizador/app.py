@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask_restful import Resource, Api, reqparse
 from flask_jwt_extended import create_access_token
-from flask_jwt_extended import JWTManager
+from flask_jwt_extended import JWTManager, jwt_required
 import requests as req
 import traceback
 from json import JSONEncoder
@@ -20,6 +20,10 @@ parser.add_argument('usuario', type=str)
 parser.add_argument('contrasena', type=str)
 class VistaAutorizador(Resource):
     usuarios_url = 'http://usuarios:5000/usuario/validar'
+
+    @jwt_required()
+    def get(self):
+        return 'El token es válido', 200
 
     def post(self):
         args = parser.parse_args()
