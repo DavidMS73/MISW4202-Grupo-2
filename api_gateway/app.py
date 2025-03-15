@@ -5,26 +5,26 @@ app = Flask(__name__)
 
 @app.route('/healthcheck', methods=['GET'])
 def healthcheck():
-    return jsonify({"status": "API Gateway is running!"})
+    return jsonify({"status": "API Gateway funcionando!"})
 
 @app.route('/api/<service_name>/<path:subpath>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def route_to_service(service_name, subpath):
     try:
-        service_urls = {
-            "bodegas": "http://host.docker.internal:9001",
-            "ventas": "http://host.docker.internal:9002",
-            "compras": "http://host.docker.internal:9000"
+        base_service_url = "http://host.docker.internal"
+        
+        service_ports = {
+            "compras": 9000,
+            "bodegas": 9001,
+            "ventas": 9002,
+            "usuarios": 9003,
+            "autorizador": 9004
         }
 
-        print("service_name: " + service_name)
-
-        if service_name not in service_urls:
+        if service_name not in service_ports:
             return jsonify({"error": "Service not found"}), 404
 
-        service_url = f"{service_urls[service_name]}/{subpath}"
-        print(service_url)        
+        service_url = f"{base_service_url}:{service_ports[service_name]}/{subpath}"
 
-        # Determina el método HTTP y redirige con datos/cabeceras
         if request.method == 'GET':
             response = requests.get(service_url, params=request.args, headers=request.headers)
         elif request.method == 'POST':

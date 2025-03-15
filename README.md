@@ -10,8 +10,10 @@ En este repositorio encontrará 5 carpetas
 1. microservicio_bodegas: microservicio de las bodegas de CCP
 2. microservicio_compras: microservicio de las compras de CCP
 3. microservicio_ventas: microservicio de las ventas de CCP
-4. nginx: configuración proxy del servidor Nginx para implementar el componente API Gateway.
-5. Postman: colección de Postman para realizar llamados a la app a través de HTTP.
+4. microservicio_autorizador: microservicio que gestiona el proceso de autorizacion entre microservicios
+5. microservicio_usuarios: microservicio que gestiona los usuarios de CCP
+6. api_gateway: configuración proxy del servidor flask para implementar el componente API Gateway.
+7. Postman: colección de Postman para realizar llamados a la app a través de HTTP.
 
 Como se puede evidenciar, tenemos 3 microservicios y un APIGateway que se encargará de redirigir las peticiones respectivas a cada microservicio.
 
