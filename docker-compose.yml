@@ -26,14 +26,13 @@ services:
       - ventas
     volumes:
       - ./microservicio_compras:/app
-
-  nginx:
-    image: nginx:alpine
-    volumes:
-      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+  apigw:
+    build:
+      context: ./api_gateway
+      dockerfile: ./Dockerfile
     ports:
-      - 8080:80
+      - "8181:8181"
     depends_on:
-      - compras
       - bodegas
       - ventas
+      - compras
