@@ -37,13 +37,13 @@ class VistaAutorizador(Resource):
                 return {'error': 'Usuario o contraseña incorrectos'}, 401
             
             res_json = response.json()
-            identity = {
-                "nombre": res_json['nombre'],
-                "usuario": res_json['usuario'],
-                "contrasena": res_json['contrasena']
-            }
             access_token = create_access_token(
-                identity=json_encoder.encode(identity)
+                identity=res_json['usuario'],
+                additional_claims={
+                    "nombre": res_json['nombre'],
+                    "usuario": res_json['usuario'],
+                    "contrasena": res_json['contrasena']
+                }
             )
             return {
                 "access_token": access_token
