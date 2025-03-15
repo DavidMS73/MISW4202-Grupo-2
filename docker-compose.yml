@@ -26,6 +26,22 @@ services:
       - ventas
     volumes:
       - ./microservicio_compras:/app
+  usuarios:
+    build:
+      context: ./microservicio_usuarios
+      dockerfile: ./Dockerfile
+    ports:
+      - "9003:5000"
+    volumes:
+      - ./microservicio_usuarios:/app
+  autorizador:
+    build:
+      context: ./microservicio_autorizador
+      dockerfile: ./Dockerfile
+    ports:
+      - "9004:5000"
+    volumes:
+      - ./microservicio_autorizador:/app
   apigw:
     build:
       context: ./api_gateway
