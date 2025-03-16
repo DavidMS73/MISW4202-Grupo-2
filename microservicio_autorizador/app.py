@@ -1,10 +1,15 @@
-from flask import Flask, jsonify
-from flask_restful import Resource, Api, reqparse
-from flask_jwt_extended import create_access_token
-from flask_jwt_extended import JWTManager, jwt_required
-import requests as req
+import csv
+import hashlib
+import hmac
+import os
 import traceback
 from json import JSONEncoder
+
+import requests as req
+from flask import Flask
+from flask_jwt_extended import JWTManager, jwt_required
+from flask_jwt_extended import create_access_token
+from flask_restful import Resource, Api, reqparse
 
 app = Flask(__name__)
 app.config["JWT_SECRET_KEY"] = "super-secret"
@@ -14,6 +19,7 @@ jwt = JWTManager(app)
 api = Api(app)
 
 json_encoder = JSONEncoder()
+secret_key = b"clave_secreta"
 
 parser = reqparse.RequestParser()
 parser.add_argument('usuario', type=str)
@@ -24,6 +30,31 @@ class VistaAutorizador(Resource):
     @jwt_required()
     def get(self):
         return 'El token es válido', 200
+
+    def __role_is_valid(self, user):
+        user_id: str = str(user["role_assigned_by"])
+        role_change: str = user["prev_role"] + "-" + user["role"]
+        role_hash = hmac.new(secret_key + user_id.encode(), role_change.encode(), hashlib.sha256).hexdigest()
+
+        return role_hash == user["role_hash"]
+
+    def __log_suspicious_activity(self, res_json):
+        file_path = "suspicious-activity.csv"
+        file_exists = os.path.exists(file_path)
+
+        with open(file_path, "a", newline="") as file:
+            writer = csv.DictWriter(file, fieldnames=["ID Usuario", "Usuario", "Rol", "Rol Anterior", "Motivo"])
+
+            if not file_exists:
+                writer.writeheader()
+
+            writer.writerows([{
+                "ID Usuario": res_json["id"],
+                "Usuario": res_json["usuario"],
+                "Rol": res_json["role"],
+                "Rol Anterior": res_json["prev_role"],
+                "Motivo": "Intento de cambio de rol no autorizado"
+            }])
 
     def post(self):
         args = parser.parse_args()
@@ -39,14 +70,19 @@ class VistaAutorizador(Resource):
             )
             if response.status_code == 401:
                 return {'error': 'Usuario o contraseña incorrectos'}, 401
-            
+
             res_json = response.json()
+            if not self.__role_is_valid(res_json):
+                self.__log_suspicious_activity(res_json)
+                return {'error': 'El rol del usuario no es válido'}, 403
+
             access_token = create_access_token(
-                identity=res_json['usuario'],
+                identity=res_json['id'],
                 additional_claims={
                     "nombre": res_json['nombre'],
                     "usuario": res_json['usuario'],
-                    "contrasena": res_json['contrasena']
+                    "contrasena": res_json['contrasena'],
+                    "role": res_json['role']
                 }
             )
             return {
