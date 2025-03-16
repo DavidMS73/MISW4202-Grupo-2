@@ -42,14 +42,15 @@ services:
       - "9004:5000"
     volumes:
       - ./microservicio_autorizador:/app
-
-  # nginx:
-  #   image: nginx:alpine
-  #   volumes:
-  #     - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
-  #   ports:
-  #     - 8080:80
-  #   depends_on:
-  #     - compras
-  #     - bodegas
-  #     - ventas
+  apigw:
+    build:
+      context: ./api_gateway
+      dockerfile: ./Dockerfile
+    ports:
+      - "8181:8181"
+    depends_on:
+      - bodegas
+      - ventas
+      - compras
+      - usuarios
+      - autorizador
