@@ -1,20 +1,13 @@
-# Usa una imagen base de Python
-FROM python:3.12-slim
-
-# Establece el directorio de trabajo dentro del contenedor
+FROM python:3.12
 WORKDIR /app
+COPY requirements.txt /app
+RUN pip install -r requirements.txt
+COPY . /app
 
-# Copia el archivo de dependencias al contenedor
-COPY requirements.txt .
-
-# Instala las dependencias de Python
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Copia el código de la aplicación al contenedor
-COPY . .
+ENV FLASK_APP=app.py
 
 # Expone el puerto en el que se ejecutará Flask
 EXPOSE 5000
 
-# Comando para iniciar el servidor Flask
-CMD ["python", "app.py"]
+ENTRYPOINT [ "gunicorn" ]
+CMD ["-b", "0.0.0.0:5000", "app:app"]

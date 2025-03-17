@@ -48,6 +48,3 @@ services:
       dockerfile: ./Dockerfile
     ports:
       - "9005:5000"
-    depends_on:
-      - usuarios
-      - autorizador
