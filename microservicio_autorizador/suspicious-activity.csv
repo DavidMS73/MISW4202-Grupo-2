@@ -1,0 +1,7 @@
+ID Usuario,Usuario,Rol,Rol Anterior,Motivo
+4,persona_logistica,LOGISTIC_DIRECTOR,LOGISTIC_PERSON,Intento de cambio de rol no autorizado
+6,persona_logistica_1,LOGISTIC_DIRECTOR,LOGISTIC_PERSON,Intento de cambio de rol no autorizado
+7,persona_logistica_2,LOGISTIC_PERSON,LOGISTIC_PERSON,Intento de cambio de rol no autorizado
+7,persona_logistica_2,LOGISTIC_PERSON,LOGISTIC_PERSON,Intento de cambio de rol no autorizado
+8,persona_logistica_3,LOGISTIC_PERSON,LOGISTIC_DIRECTOR,Intento de cambio de rol no autorizado
+9,persona_logistica_4,LOGISTIC_DIRECTOR,LOGISTIC_DIRECTOR,Intento de cambio de rol no autorizado
