@@ -16,3 +16,6 @@ psycopg2
 marshmallow
 marshmallow-sqlalchemy
 marshmallow_enum
+Flask-JWT==0.2.0
+Flask-JWT-Extended==4.2.3
+PyJWT==2.1.0

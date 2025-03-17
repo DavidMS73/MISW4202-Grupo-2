@@ -78,6 +78,10 @@ class VistaUsuario(Resource):
         db.session.commit()
         return usuario_schema.dump(usuario)
 
+    def get(self, user_id):
+        usuario: Usuario = Usuario.query.get_or_404(user_id)
+        return usuario_schema.dump(usuario)
+
     
 
 class VistaValidarUsuario(Resource):

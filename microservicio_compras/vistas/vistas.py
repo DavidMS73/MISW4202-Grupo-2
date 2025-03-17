@@ -1,12 +1,15 @@
 import csv
+import enum
 import os
 import random
 import time
 from datetime import date
+from functools import wraps
 from random import randint
 
 import requests
 from flask import request
+from flask_jwt_extended import verify_jwt_in_request, get_jwt
 from flask_restful import Resource
 from sqlalchemy.exc import IntegrityError
 
@@ -20,6 +23,31 @@ env_bodegas_host = os.environ.get('BODEGAS_HOST')
 env_ventas_host = os.environ.get('VENTAS_HOST')
 bodegas_host = env_bodegas_host if env_bodegas_host else 'http://127.0.0.1:9001'
 ventas_host = env_ventas_host if env_ventas_host else 'http://127.0.0.1:9002'
+
+
+class RolesEnum(enum.Enum):
+    SHOPKEEPER = "SHOPKEEPER"
+    SUPER_ADMIN = "SUPER_ADMIN"
+    ADMIN = "ADMIN"
+    LOGISTIC_DIRECTOR = "LOGISTIC_DIRECTOR"
+    LOGISTIC_PERSON = "LOGISTIC_PERSON"
+    PROVIDER = "PROVIDER"
+
+
+def allowed_roles(roles: list[RolesEnum]):
+    def wrapper(fn):
+        @wraps(fn)
+        def decorator(*args, **kwargs):
+            verify_jwt_in_request(locations='headers')
+            claims = get_jwt()
+            if any(claims["role"] == role.value for role in roles):
+                return fn(*args, **kwargs)
+            else:
+                return {"error": "Este rol no tiene permisos para realizar esta acción"}, 403
+
+        return decorator
+
+    return wrapper
 
 class VistaEnv(Resource):
     def get(self):
@@ -120,3 +148,9 @@ class VistaComprasProductos(Resource):
             return "El usuario ya tiene una compra con ese producto", 409
 
         return producto_schema.dump(producto)
+
+
+class VistaProveedores(Resource):
+    @allowed_roles([RolesEnum.LOGISTIC_DIRECTOR])
+    def get(self):
+        return [{"nombre": "Proveedor 1", "id": 1}, {"nombre": "Proveedor 2", "id": 2}], 200

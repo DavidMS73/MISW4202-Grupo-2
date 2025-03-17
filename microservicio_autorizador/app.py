@@ -7,7 +7,7 @@ from json import JSONEncoder
 
 import requests as req
 from flask import Flask
-from flask_jwt_extended import JWTManager, jwt_required
+from flask_jwt_extended import JWTManager, jwt_required, get_jwt
 from flask_jwt_extended import create_access_token
 from flask_restful import Resource, Api, reqparse
 
@@ -25,10 +25,21 @@ parser = reqparse.RequestParser()
 parser.add_argument('usuario', type=str)
 parser.add_argument('contrasena', type=str)
 class VistaAutorizador(Resource):
-    usuarios_url = 'http://usuarios:5000/usuario/validar'
+    usuarios_url = 'http://usuarios:5000/usuario'
 
     @jwt_required()
     def get(self):
+        token_payload = get_jwt()
+        user_id = token_payload['sub']
+        response = req.get(
+            f"{self.usuarios_url}/{user_id}",
+        )
+
+        res_json = response.json()
+        if not self.__role_is_valid(res_json):
+            self.__log_suspicious_activity(res_json)
+            return {'error': 'El rol del usuario no es válido'}, 403
+
         return 'El token es válido', 200
 
     def __role_is_valid(self, user):
@@ -61,7 +72,7 @@ class VistaAutorizador(Resource):
         try:
             headers = {'Content-Type': 'application/json'}
             response = req.post(
-                self.usuarios_url,
+                f"{self.usuarios_url}/validar",
                 headers=headers,
                 data=json_encoder.encode({
                     'usuario': args['usuario'],
@@ -94,5 +105,6 @@ class VistaAutorizador(Resource):
                 'error': 'Ha ocurrido un error',
                 'stacktrace': traceback.format_exc(),
             }, 500
+
 
 api.add_resource(VistaAutorizador, '/autorizador')

@@ -46,5 +46,7 @@ services:
     build:
       context: ./api_gateway
       dockerfile: ./Dockerfile
+    volumes:
+      - ./api_gateway:/app
     ports:
       - "9005:5000"
