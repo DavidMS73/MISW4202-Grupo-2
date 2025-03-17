@@ -1,5 +1,5 @@
-from flask import Flask, request, jsonify
 import requests
+from flask import Flask, request, jsonify
 
 app = Flask(__name__)
 
@@ -10,7 +10,7 @@ def healthcheck():
 @app.route('/api/<service_name>/<path:subpath>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def route_to_service(service_name, subpath):
     try:
-        base_service_url = "http://host.docker.internal"
+        base_service_url = "http://44.204.68.21"
         
         service_ports = {
             "compras": 9000,
