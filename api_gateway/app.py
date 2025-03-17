@@ -10,7 +10,7 @@ def healthcheck():
 @app.route('/api/<service_name>/<path:subpath>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def route_to_service(service_name, subpath):
     try:
-        base_service_url = "http://44.204.68.21"
+        base_service_url = "http://" + service_name + ":5000"
         
         service_ports = {
             "compras": 9000,
@@ -23,7 +23,7 @@ def route_to_service(service_name, subpath):
         if service_name not in service_ports:
             return jsonify({"error": "Service not found"}), 404
 
-        service_url = f"{base_service_url}:{service_ports[service_name]}/{subpath}"
+        service_url = f"{base_service_url}/{subpath}"
 
         if request.method == 'GET':
             response = requests.get(service_url, params=request.args, headers=request.headers)
