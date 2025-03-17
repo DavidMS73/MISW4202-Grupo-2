@@ -47,10 +47,7 @@ services:
       context: ./api_gateway
       dockerfile: ./Dockerfile
     ports:
-      - "8181:8181"
+      - "9005:5000"
     depends_on:
-      - bodegas
-      - ventas
-      - compras
       - usuarios
       - autorizador
